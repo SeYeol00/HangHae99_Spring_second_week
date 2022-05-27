@@ -1,6 +1,8 @@
 package com.sparta.myblog.controller;
 
 import com.sparta.myblog.domain.*;
+import com.sparta.myblog.model.Post;
+import com.sparta.myblog.repository.PostRepository;
 import com.sparta.myblog.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +21,7 @@ public class PostController {
 
     @GetMapping("/api/posts")
     public List<PostListRequestDto> getPosts(){
-        List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
+        List<Post> posts = postRepository.findAllByOrderByModifiedAtDesc();
         List<PostListRequestDto> Parts = new ArrayList<>();
         for(Post post : posts){
             PostListRequestDto part = new PostListRequestDto();

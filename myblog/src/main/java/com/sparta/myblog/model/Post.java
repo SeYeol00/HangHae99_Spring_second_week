@@ -1,6 +1,8 @@
-package com.sparta.myblog.domain;
+package com.sparta.myblog.model;
 
 
+import com.sparta.myblog.domain.PostRequestDto;
+import com.sparta.myblog.domain.Timestamped;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
