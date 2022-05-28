@@ -43,15 +43,14 @@ public class CommentService {
         return commentRepository.findAllByPostId(postId);
     }
 
-    public void deleteComment(String username, Long Id,CommentUpdateDto commentUpdateDto){
+    public Comment deleteComment(String username, Long Id){
         Comment comment = commentRepository.findById(Id).orElseThrow(()->new NullPointerException("해당 아이디가 존재하지 않습니다."));
         if(username.equals(comment.getUsername())){
             commentRepository.deleteById(Id);
         }else{
             throw new IllegalArgumentException("작성자와 사용자가 같지 않습니다.");
         }
+        return comment;
     }
-
-
 
 }

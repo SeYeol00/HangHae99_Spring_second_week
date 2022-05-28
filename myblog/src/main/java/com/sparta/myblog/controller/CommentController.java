@@ -48,13 +48,10 @@ public class CommentController {
     }
 
     @DeleteMapping("/api/postRead/{id}")
-    public Long deleteMemo(@PathVariable Long id, @RequestBody PostRequestDto requestDto) {
-        Post post = postRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
-        );
-        if(post.getPassword() == requestDto.getPassword()){
-            postRepository.deleteById(id);
-        }
-        return id;
+    public Comment deleteComment(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        String username = userDetails.getUser().getUsername();
+
+        // 응답 보내기 (업데이트된 상품 id)
+        return commentService.deleteComment(username,id);
     }
 }
