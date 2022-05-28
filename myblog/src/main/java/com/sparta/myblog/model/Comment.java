@@ -1,5 +1,8 @@
 package com.sparta.myblog.model;
 
+import com.sparta.myblog.domain.CommentRequestDto;
+import com.sparta.myblog.domain.CommentUpdateDto;
+import com.sparta.myblog.domain.PostRequestDto;
 import com.sparta.myblog.domain.Timestamped;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +18,6 @@ public class Comment extends Timestamped {
     @Id
     private Long id;
 
-
     @Column(nullable = false)
     private String username;
 
@@ -25,9 +27,13 @@ public class Comment extends Timestamped {
     @Column(nullable = false)
     private Long postId;
 
-    public Comment(String username, String comments, Long postId) {
-        this.username = username;
-        this.comments = comments;
+    public Comment(CommentRequestDto commentRequestDto, Long postId) {
+        this.username = commentRequestDto.g;
+        this.comments = commentRequestDto.getComments();
         this.postId = postId;
+    }
+
+    public void update(CommentUpdateDto commentUpdateDto){
+        this.comments = commentUpdateDto.getComments();
     }
 }

@@ -5,21 +5,26 @@ import com.sparta.myblog.model.Post;
 import com.sparta.myblog.repository.PostRepository;
 import com.sparta.myblog.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@RequiredArgsConstructor
 @RestController
 public class PostController {
 
     private final PostRepository postRepository;
 
     private final PostService postService;
+    @Autowired
+    public PostController(PostRepository postRepository, PostService postService){
+        this.postRepository = postRepository;
+        this.postService = postService;
+    }
 
 
-    @GetMapping("/api/posts")
+    @GetMapping("/api/postsRead")
     public List<PostListRequestDto> getPosts(){
         List<Post> posts = postRepository.findAllByOrderByModifiedAtDesc();
         List<PostListRequestDto> Parts = new ArrayList<>();
@@ -34,7 +39,7 @@ public class PostController {
     }
 
 
-    @PostMapping("/api/posts")
+    @PostMapping("/api/postsWrite")
     public Post createdPost(@RequestBody PostRequestDto requestDto){
         Post post = new Post(requestDto);
         System.out.println(post.toString());
@@ -42,7 +47,7 @@ public class PostController {
     }
 
 
-    @GetMapping("/api/posts/{id}")
+    @GetMapping("/api/postsRead/{id}")
     public PostOneRequestDto getPost(@PathVariable Long id){
         Post post =  postRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("아이디가 존재하지 않습니다."));
@@ -55,7 +60,7 @@ public class PostController {
     }
 
 
-    @PutMapping("/api/posts/{id}")
+    @PutMapping("/api/postsUpdate/{id}")
     public Long updatePost (@PathVariable Long id, @RequestBody PostRequestDto requestDto){
         Post post = postRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
@@ -66,7 +71,7 @@ public class PostController {
         return id;
     }
 
-    @DeleteMapping("/api/posts/{id}")
+    @DeleteMapping("/api/postsDelete/{id}")
     public Long deleteMemo(@PathVariable Long id, @RequestBody PostRequestDto requestDto) {
         Post post = postRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
