@@ -23,7 +23,7 @@ public class UserController {
     }
 
     // 회원 로그인 페이지
-    @GetMapping("/user/login")//동적 리스폰스로 프론트에서 타임리프로 받는다는 가정
+    @GetMapping("/user/loginView")//동적 리스폰스로 프론트에서 타임리프로 받는다는 가정
     public String login(@RequestParam(value = "error", required = false) String error,
                             @RequestParam(value = "exception", required = false) String exception, Model model) {
         if(error != null && exception!=null){
