@@ -86,7 +86,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // [로그아웃 기능]
                 .logout()
                 // 로그아웃 요청 처리 URL
-                .logoutUrl("/user/logout")
+                .logoutUrl("/user/logout").deleteCookies("token")
                 .permitAll()
                 .and()
                 .exceptionHandling()
@@ -131,6 +131,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/basic.js");
 
         skipPathList.add("GET,/favicon.ico");
+
+        skipPathList.add("GET,/api/postsRead");
 
         FilterSkipMatcher matcher = new FilterSkipMatcher(
                 skipPathList,
