@@ -1,12 +1,16 @@
 package com.sparta.myblog.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.myblog.domain.*;
 import com.sparta.myblog.model.Post;
 import com.sparta.myblog.repository.PostRepository;
 import com.sparta.myblog.security.UserDetailsImpl;
+import com.sparta.myblog.service.CommentService;
 import com.sparta.myblog.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +24,13 @@ public class PostController {
     private final PostRepository postRepository;
 
     private final PostService postService;
+
+    private final CommentService commentService;
     @Autowired
-    public PostController(PostRepository postRepository, PostService postService){
+    public PostController(PostRepository postRepository, PostService postService, CommentService commentService){
         this.postRepository = postRepository;
         this.postService = postService;
+        this.commentService = commentService;
     }
 
 
@@ -43,20 +50,21 @@ public class PostController {
 
 
     @PostMapping("/api/postsWrite")
-    public Post createdPost(@RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails, Model model) throws Exception {
-        if(userDetails.getUsername()==null) {
-            String warn = "로그인을 해주세요.";
-            model.addAttribute(warn);
-            throw new Exception("로그인을 해주세요.");
+    public String createdPost(@RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails ) throws Exception {
+        String warn = "로그인을 해주세요.";
+        if(userDetails.getUsername()!=null) {
+            Post post = new Post(requestDto);
+            postRepository.save(post);
+            warn = "생성 성공";
+            return warn;
         }
-        Post post = new Post(requestDto);
-        return postRepository.save(post);
+        return warn;
     }
 
 
     @GetMapping("/api/postsRead/{id}")
-    public PostOneRequestDto getPost(@PathVariable Long id){
-
+    public JSONArray getPost(@PathVariable Long id){
+        JSONArray jsonArray = new JSONArray();
         Post post =  postRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("아이디가 존재하지 않습니다."));
         PostOneRequestDto one = new PostOneRequestDto();
@@ -64,40 +72,42 @@ public class PostController {
         one.setUsername(post.getUsername());
         one.setContents(post.getContents());
         one.setCreatedAt(post.getCreatedAt());
-        return one;
+        jsonArray.put(one);
+        jsonArray.put(commentService.getComments(id));
+        return jsonArray;
     }
 
 
     @PutMapping("/api/postsUpdate/{id}")
-    public Long updatePost (@PathVariable Long id, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails, Model model) throws Exception{
-        if(userDetails.getUsername()==null) {
-            String warn = "로그인을 해주세요.";
-            model.addAttribute(warn);
-            throw new Exception("로그인을 해주세요.");
+    public String updatePost (@PathVariable Long id, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception{
+        String warn = "로그인을 해주세요.";
+        if(userDetails.getUsername()!=null) {
+            Post post = postRepository.findById(id).orElseThrow(
+                    () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
+            );
+            if(post.getPassword() == requestDto.getPassword()){
+                postService.update(id, requestDto);
+            }
+            warn = "업데이트 완료";
+            return warn;
         }
-        Post post = postRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
-        );
-        if(post.getPassword() == requestDto.getPassword()){
-            postService.update(id, requestDto);
-        }
-        return id;
+        return warn;
     }
 
     @DeleteMapping("/api/postsDelete/{id}")
-    public Long deleteMemo(@PathVariable Long id, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails, Model model) throws Exception {
+    public String deleteMemo(@PathVariable Long id, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception {
+        String warn = "로그인을 해주세요.";
         if(userDetails.getUsername()==null) {
-            String warn = "로그인을 해주세요.";
-            model.addAttribute(warn);
-            throw new Exception("로그인을 해주세요.");
+            Post post = postRepository.findById(id).orElseThrow(
+                    () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
+            );
+            if(post.getPassword() == requestDto.getPassword()){
+                postRepository.deleteById(id);
+            }
+            warn = "삭제 완료";
+            return warn;
         }
-        Post post = postRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
-        );
-        if(post.getPassword() == requestDto.getPassword()){
-            postRepository.deleteById(id);
-        }
-        return id;
+        return warn;
     }
 
 }

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 public class CommentController {
 
     private final CommentService commentService;
@@ -26,48 +26,48 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    @GetMapping("/api/postsRead/{id}")
+    /*@GetMapping("/api/commentsRead/{id}")
     public List<Comment> getComments(@PathVariable Long id ){//포스트 아이디
         return commentService.getComments(id);
-    }
+    }*/
 
-    @PostMapping("/api/postsRead/{id}")
-    public Comment createComment(@PathVariable Long id,
+    @ResponseBody
+    @PostMapping("/api/commentsPost/{id}")
+    public String createComment(@PathVariable Long id,
                                  @RequestBody CommentRequestDto commentRequestDto,
-                                 @AuthenticationPrincipal UserDetailsImpl userDetails, Model model) throws Exception {
-        if(userDetails.getUsername()==null) {
+                                 @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception {
         String warn = "로그인을 해주세요.";
-        model.addAttribute(warn);
-        throw new Exception("로그인을 해주세요.");
+        if(userDetails.getUsername()!=null) {
+            String username = userDetails.getUser().getUsername();
+            commentRequestDto.setUsername(username);
+            warn = commentService.createComment(commentRequestDto,id);;
         }
-        String username = userDetails.getUser().getUsername();
-        commentRequestDto.setUsername(username);
-        return commentService.createComment(commentRequestDto,id);
-
-    }
-    @PutMapping("/api/postsRead/{id}")
-    public Comment updateProduct(@PathVariable Long id, @RequestBody CommentUpdateDto commentUpdateDto, @AuthenticationPrincipal UserDetailsImpl userDetails, Model model) throws Exception {
-        if(userDetails.getUsername()==null) {
-            String warn = "로그인을 해주세요.";
-            model.addAttribute(warn);
-            throw new Exception("로그인을 해주세요.");
-        }
-        String username = userDetails.getUser().getUsername();
-
-        // 응답 보내기 (업데이트된 상품 id)
-        return commentService.updateComment(username,id,commentUpdateDto);
+        return warn;
     }
 
-    @DeleteMapping("/api/postRead/{id}")
-    public Comment deleteComment(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails, Model model) throws Exception {
-        if(userDetails.getUsername()==null) {
-            String warn = "로그인을 해주세요.";
-            model.addAttribute(warn);
-            throw new Exception("로그인을 해주세요.");
-        }
-        String username = userDetails.getUser().getUsername();
+    @ResponseBody
+    @PutMapping("/api/commentsUpdate/{id}")
+    public String updateProduct(@PathVariable Long id, @RequestBody CommentUpdateDto commentUpdateDto, @AuthenticationPrincipal UserDetailsImpl userDetails, Model model) throws Exception {
+        String warn = "로그인을 해주세요.";
+        if(userDetails.getUsername()!=null) {
+            String username = userDetails.getUser().getUsername();
+            // 응답 보내기 (업데이트된 상품 id)
+             commentService.updateComment(username,id,commentUpdateDto);
+             warn = "업데이트 성공";
+        }return warn;
 
-        // 응답 보내기 (업데이트된 상품 id)
-        return commentService.deleteComment(username,id);
+    }
+
+    @ResponseBody
+    @DeleteMapping("/api/commentsDelete/{id}")
+    public String deleteComment(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails, Model model) throws Exception {
+        String warn = "로그인을 해주세요.";
+        if(userDetails.getUsername()!=null) {
+            String username = userDetails.getUser().getUsername();
+            // 응답 보내기 (업데이트된 상품 id)
+            commentService.deleteComment(username,id);
+            warn = "삭제 성공";
+        }
+        return warn;
     }
 }

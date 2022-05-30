@@ -14,4 +14,5 @@ public class PostOneRequestDto {
     private String title;
     private String username;
     private String contents;
+
 }

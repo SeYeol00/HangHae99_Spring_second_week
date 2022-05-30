@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -56,12 +53,13 @@ public class UserController {
     // 회원 가입 요청 처리
     @PostMapping("/user/signup")
     public String registerUser(SignupRequestDto requestDto, Model model) {
+        System.out.println("good");
         String finished = userService.registerUser(requestDto);
         model.addAttribute("회원가입 결과",finished);
         if(String.valueOf(model).equals("성공입니다.")){
             return "signup";
         }
-        return "redirect:/user/login";//로그인 페이지로 리다이렉트
+        return "redirect:/user/loginView";//로그인 페이지로 리다이렉트
     }
 
 

@@ -21,11 +21,13 @@ public class CommentService {
     this.commentRepository = commentRepository;
     }
 
-    public Comment createComment(CommentRequestDto commentRequestDto,Long postId){
+    public String createComment(CommentRequestDto commentRequestDto,Long postId){
      Comment comment = new Comment(commentRequestDto,postId);
+     if(comment.getComments().equals("")){
+         return "댓글 내용을 입력해주세요.";
+     }
      commentRepository.save(comment);
-
-     return comment;
+     return "생성 성공";
     }
 
     public Comment updateComment(String username, Long Id, CommentUpdateDto commentUpdateDto){
