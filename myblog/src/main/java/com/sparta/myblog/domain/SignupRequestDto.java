@@ -1,9 +1,9 @@
 package com.sparta.myblog.domain;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @Setter
 @Getter

@@ -2,6 +2,8 @@ package com.sparta.myblog.controller;
 
 import com.sparta.myblog.domain.SignupRequestDto;
 import com.sparta.myblog.domain.UserInfoDto;
+import com.sparta.myblog.model.User;
+import com.sparta.myblog.repository.UserRepository;
 import com.sparta.myblog.security.UserDetailsImpl;
 import com.sparta.myblog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -17,10 +21,13 @@ public class UserController {
 
     private final UserService userService;
 
+    private final UserRepository userRepository;
+
 
     @Autowired // DI 디펜던시 인젝션
-    public UserController(UserService userService) {
+    public UserController(UserService userService,UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     // 회원 로그인 페이지
@@ -56,10 +63,11 @@ public class UserController {
         System.out.println("good");
         String finished = userService.registerUser(requestDto);
         model.addAttribute("회원가입 결과",finished);
-        if(String.valueOf(model).equals("성공입니다.")){
-            return "signup";
+        Optional<User> found = userRepository.findByUsername(requestDto.getUsername());
+        if (Objects.requireNonNull(model.getAttribute("회원가입 결과")).equals("성공입니다.")) {
+            return "redirect:/user/loginView";//로그인 페이지로 리다이렉트
         }
-        return "redirect:/user/loginView";//로그인 페이지로 리다이렉트
+        return "signup";
     }
 
 

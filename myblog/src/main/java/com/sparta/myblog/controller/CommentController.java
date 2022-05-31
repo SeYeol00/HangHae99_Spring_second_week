@@ -32,7 +32,7 @@ public class CommentController {
     }*/
 
     @ResponseBody
-    @PostMapping("/api/commentsPost/{id}")
+    @PostMapping("/api/commentsCreate/{id}")
     public String createComment(@PathVariable Long id,
                                  @RequestBody CommentRequestDto commentRequestDto,
                                  @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception {
@@ -49,7 +49,7 @@ public class CommentController {
     @PutMapping("/api/commentsUpdate/{id}")
     public String updateProduct(@PathVariable Long id, @RequestBody CommentUpdateDto commentUpdateDto, @AuthenticationPrincipal UserDetailsImpl userDetails, Model model) throws Exception {
         String warn = "로그인을 해주세요.";
-        if(userDetails.getUsername()!=null) {
+        if(userDetails.getUsername().equals(commentUpdateDto.getUsername())) {
             String username = userDetails.getUser().getUsername();
             // 응답 보내기 (업데이트된 상품 id)
              commentService.updateComment(username,id,commentUpdateDto);
@@ -60,9 +60,9 @@ public class CommentController {
 
     @ResponseBody
     @DeleteMapping("/api/commentsDelete/{id}")
-    public String deleteComment(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails, Model model) throws Exception {
+    public String deleteComment(@PathVariable Long id,@RequestBody CommentUpdateDto commentUpdateDto,@AuthenticationPrincipal UserDetailsImpl userDetails, Model model) throws Exception {
         String warn = "로그인을 해주세요.";
-        if(userDetails.getUsername()!=null) {
+        if(userDetails.getUsername().equals(commentUpdateDto.getUsername())) {
             String username = userDetails.getUser().getUsername();
             // 응답 보내기 (업데이트된 상품 id)
             commentService.deleteComment(username,id);
