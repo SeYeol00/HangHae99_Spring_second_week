@@ -2,6 +2,7 @@ package com.sparta.myblog.mockobject;
 
 import com.sparta.myblog.domain.SignupRequestDto;
 import com.sparta.myblog.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Objects;
@@ -10,13 +11,12 @@ import java.util.regex.Pattern;
 
 public class MockUserService {
 
-    private final PasswordEncoder passwordEncoder;
 
     private final MockUserRepository mockUserRepository;
 
-    public MockUserService(MockUserRepository mockUserRepository,PasswordEncoder passwordEncoder){
+
+    public MockUserService(MockUserRepository mockUserRepository){
         this.mockUserRepository =mockUserRepository;
-        this.passwordEncoder = passwordEncoder;
     }
     public String registerUser(SignupRequestDto requestDto) {
         // 회원 ID 중복 확인
@@ -35,17 +35,17 @@ public class MockUserService {
             System.out.println("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
             return ("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
         }System.out.println(3);
-        if(requestDto.getPassword().contains(username)){
+        if(requestDto.getUsername().contains(requestDto.getPassword())){
             System.out.println("닉네임과 같은 값이 비밀번호에 포함되어있습니다. ");
             return("닉네임과 같은 값이 비밀번호에 포함되어 있습니다.");
         }System.out.println(4);
-        if(!Pattern.matches("^{4,}$",requestDto.getPassword())){
+        if(!(requestDto.getPassword().length() >=4)){
             System.out.println("비밀번호가 4자 미만입니다.");
             return("비밀번호가 4자 미만입니다.");
         }
 
         // 패스워드 암호화
-        String password = passwordEncoder.encode(requestDto.getPassword());
+        String password = requestDto.getPassword();
         String email = requestDto.getEmail();
 
 

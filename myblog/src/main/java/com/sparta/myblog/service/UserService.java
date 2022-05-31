@@ -39,11 +39,11 @@ public class UserService {
             System.out.println("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
             return ("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
         }System.out.println(requestDto);
-        if(requestDto.getPassword().contains(username)){
+        if(requestDto.getUsername().contains(requestDto.getPassword())){
             System.out.println("닉네임과 같은 값이 비밀번호에 포함되어있습니다. ");
             return("닉네임과 같은 값이 비밀번호에 포함되어 있습니다.");
         }System.out.println(requestDto);
-        if(!Pattern.matches("^{4,}$",requestDto.getPassword())){
+        if(!(requestDto.getPassword().length() >=4)){
             System.out.println("비밀번호가 4자 미만입니다.");
             return("비밀번호가 4자 미만입니다.");
         }
