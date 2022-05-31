@@ -52,7 +52,7 @@ public class PostController {
     @PostMapping("/api/postsWrite")
     public String createdPost(@RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails ) throws Exception {
         String warn = "로그인을 해주세요.";
-        if(userDetails.getUsername()!=null) {
+        if(userDetails.getUser()!=null) {
             Post post = new Post(requestDto);
             postRepository.save(post);
             warn = "생성 성공";
@@ -81,7 +81,7 @@ public class PostController {
     @PutMapping("/api/postsUpdate/{id}")
     public String updatePost (@PathVariable Long id, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception{
         String warn = "로그인을 해주세요.";
-        if(userDetails.getUsername()!=null) {
+        if(userDetails.getUser()!=null) {
             Post post = postRepository.findById(id).orElseThrow(
                     () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
             );
@@ -97,7 +97,7 @@ public class PostController {
     @DeleteMapping("/api/postsDelete/{id}")
     public String deleteMemo(@PathVariable Long id, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception {
         String warn = "로그인을 해주세요.";
-        if(userDetails.getUsername()==null) {
+        if(userDetails.getUser()!=null) {
             Post post = postRepository.findById(id).orElseThrow(
                     () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
             );

@@ -37,7 +37,7 @@ public class CommentController {
                                  @RequestBody CommentRequestDto commentRequestDto,
                                  @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception {
         String warn = "로그인을 해주세요.";
-        if(userDetails.getUsername()!=null) {
+        if(userDetails.getUser()!=null) {
             String username = userDetails.getUser().getUsername();
             commentRequestDto.setUsername(username);
             warn = commentService.createComment(commentRequestDto,id);;
