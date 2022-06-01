@@ -4,14 +4,12 @@ import com.sparta.myblog.domain.SignupRequestDto;
 import com.sparta.myblog.model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MockUserServiceTest {
-
-
-
     @Test
     @DisplayName("유저 회원가입 정상 케이스")
     void signUp_username(){

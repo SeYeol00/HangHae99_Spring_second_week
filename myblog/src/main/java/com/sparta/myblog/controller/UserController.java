@@ -33,10 +33,13 @@ public class UserController {
     // 회원 로그인 페이지
     @GetMapping("/user/loginView")//동적 리스폰스로 프론트에서 타임리프로 받는다는 가정
     public String login(@RequestParam(value = "error", required = false) String error,
-                            @RequestParam(value = "exception", required = false) String exception, Model model) {
+                            @RequestParam(value = "exception", required = false) String exception, Model model,@AuthenticationPrincipal UserDetailsImpl userDetails ) {
         if(error != null && exception!=null){
             model.addAttribute("error", error);
             model.addAttribute("exception", exception);
+        }
+        if(userDetails.getUser()!=null){
+            model.addAttribute("error", "이미 로그인 하셨습니다.");
         }
         return "login";
     }
