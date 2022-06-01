@@ -1,4 +1,4 @@
-# HangHae99_Spring_first_week
+# HangHae99_Spring_second_week
 
 ## 항해99 스프링 입문 주차 과제 5가지 REST api를 구현했습니다. 
 
