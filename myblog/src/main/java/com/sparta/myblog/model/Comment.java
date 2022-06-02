@@ -6,9 +6,10 @@ import com.sparta.myblog.domain.PostRequestDto;
 import com.sparta.myblog.domain.Timestamped;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-
+@Setter
 @NoArgsConstructor
 @Getter
 @Entity
