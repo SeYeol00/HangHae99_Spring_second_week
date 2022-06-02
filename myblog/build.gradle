@@ -37,10 +37,10 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.springframework.data/spring-data-elasticsearch
 	implementation group: 'org.springframework.data', name: 'spring-data-elasticsearch', version: '4.0.9.RELEASE'
 
-	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+	//implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
 	implementation 'commons-codec:commons-codec:1.13'
-	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
-	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+	//runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
+	//runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 	compileOnly 'com.auth0:java-jwt:3.13.0'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation group: 'org.javassist', name: 'javassist', version: '3.15.0-GA'
