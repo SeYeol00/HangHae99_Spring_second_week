@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="springboot-database" uuid="55d4837c-fa42-4e61-9292-257989256a20">
+    <data-source source="LOCAL" name="@springboot-db.cpyqzq2gf8vi.ap-northeast-2.rds.amazonaws.com" uuid="c95705c9-c5a0-4b82-b374-3b2d3db58af5">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
