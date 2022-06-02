@@ -38,9 +38,7 @@ public class UserController {
             model.addAttribute("error", error);
             model.addAttribute("exception", exception);
         }
-        if(userDetails.getUser()!=null){
-            model.addAttribute("error", "이미 로그인 하셨습니다.");
-        }
+
         return "login";
     }
 
